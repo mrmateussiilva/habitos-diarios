@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Ícones PWA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #6366f1;
+    }
+    .instructions {
+      background: #f0f9ff;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      border-left: 4px solid #6366f1;
+    }
+    canvas {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      display: block;
+      margin: 20px 0;
+      cursor: pointer;
+    }
+    button {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #4f46e5;
+    }
+    .sizes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .size-item {
+      padding: 10px;
+      background: #f9fafb;
+      border-radius: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Gerador de Ícones PWA</h1>
+    <div class="instructions">
+      <p><strong>Como usar:</strong></p>
+      <ol>
+        <li>Clique no canvas para desenhar ou use o ícone abaixo</li>
+        <li>O ícone será gerado automaticamente em todos os tamanhos necessários</li>
+        <li>Clique em "Baixar Todos os Ícones" para salvar na pasta public/icons/</li>
+        <li>Os ícones serão salvos automaticamente nos tamanhos corretos</li>
+      </ol>
+    </div>
+    
+    <canvas id="iconCanvas" width="512" height="512"></canvas>
+    
+    <div>
+      <button onclick="drawIcon()">🔄 Gerar Ícone Padrão</button>
+      <button onclick="downloadAll()">📥 Baixar Todos os Ícones</button>
+      <button onclick="clearCanvas()">🗑️ Limpar</button>
+    </div>
+    
+    <div class="sizes">
+      <div class="size-item">72x72</div>
+      <div class="size-item">96x96</div>
+      <div class="size-item">128x128</div>
+      <div class="size-item">144x144</div>
+      <div class="size-item">152x152</div>
+      <div class="size-item">192x192</div>
+      <div class="size-item">384x384</div>
+      <div class="size-item">512x512</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('iconCanvas');
+    const ctx = canvas.getContext('2d');
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+
+    function drawIcon() {
+      // Fundo com gradiente
+      const gradient = ctx.createLinearGradient(0, 0, 512, 512);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Emoji/ícone central
+      ctx.font = 'bold 300px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'white';
+      ctx.fillText('📊', 256, 280);
+
+      // Texto adicional (opcional)
+      ctx.font = 'bold 60px Arial';
+      ctx.fillText('HÁBITOS', 256, 420);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, 512, 512);
+    }
+
+    function downloadIcon(size) {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = size;
+      tempCanvas.height = size;
+      const tempCtx = tempCanvas.getContext('2d');
+      
+      // Redesenha no tamanho específico
+      const gradient = tempCtx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      tempCtx.fillStyle = gradient;
+      tempCtx.fillRect(0, 0, size, size);
+
+      // Ajusta o tamanho da fonte proporcionalmente
+      const emojiSize = Math.floor(size * 0.6);
+      const textSize = Math.floor(size * 0.12);
+      
+      tempCtx.font = `bold ${emojiSize}px Arial`;
+      tempCtx.textAlign = 'center';
+      tempCtx.textBaseline = 'middle';
+      tempCtx.fillStyle = 'white';
+      tempCtx.fillText('📊', size / 2, size * 0.55);
+
+      if (size >= 192) {
+        tempCtx.font = `bold ${textSize}px Arial`;
+        tempCtx.fillText('HÁBITOS', size / 2, size * 0.82);
+      }
+
+      // Cria o link de download
+      tempCanvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `icon-${size}x${size}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    function downloadAll() {
+      sizes.forEach((size, index) => {
+        setTimeout(() => {
+          downloadIcon(size);
+        }, index * 200);
+      });
+    }
+
+    // Desenha o ícone inicial
+    drawIcon();
+
+    // Permite clicar no canvas para redesenhar
+    canvas.addEventListener('click', drawIcon);
+  </script>
+</body>
+</html>
+
