@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="App para acompanhar seus hábitos diários e melhorar sua rotina">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hábitos Diários">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" href="/icons/icon-192x192.png">
+  <title>Hábitos Diários</title>
+  <link rel="stylesheet" href="/src/styles/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="app-title">
+          <span class="title-icon">📊</span>
+          Hábitos Diários
+        </h1>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-value" id="todayCompletion">0%</div>
+        <div class="stat-label">Hoje</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="bestStreak">0</div>
+        <div class="stat-label">Melhor Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalDays">0</div>
+        <div class="stat-label">Total Dias</div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Habits List -->
+      <section class="habits-section">
+        <div class="section-header">
+          <h2>Meus Hábitos</h2>
+          <button class="btn btn-primary" id="addHabitBtn">
+            <span>➕</span> Adicionar
+          </button>
+        </div>
+        <div id="habitsList" class="habits-list">
+          <!-- Hábitos serão inseridos aqui dinamicamente -->
+        </div>
+      </section>
+
+      <!-- Calendar Section -->
+      <section class="calendar-section">
+        <h2>Histórico do Mês</h2>
+        <div id="calendar" class="calendar">
+          <!-- Calendário será inserido aqui dinamicamente -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal para adicionar/editar hábito -->
+  <div id="habitModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Adicionar Hábito</h2>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <form id="habitForm" class="habit-form">
+        <input type="hidden" id="habitId">
+        
+        <div class="form-group">
+          <label for="habitName">Nome do Hábito</label>
+          <input type="text" id="habitName" required placeholder="Ex: Beber água">
+        </div>
+
+        <div class="form-group">
+          <label for="habitEmoji">Emoji/Ícone</label>
+          <input type="text" id="habitEmoji" required placeholder="💧" maxlength="2">
+        </div>
+
+        <div class="form-group">
+          <label for="habitColor">Cor</label>
+          <div class="color-picker">
+            <input type="color" id="habitColor" value="#6366f1">
+            <div class="color-presets">
+              <button type="button" class="color-preset" data-color="#6366f1" style="background: #6366f1"></button>
+              <button type="button" class="color-preset" data-color="#8b5cf6" style="background: #8b5cf6"></button>
+              <button type="button" class="color-preset" data-color="#ec4899" style="background: #ec4899"></button>
+              <button type="button" class="color-preset" data-color="#ef4444" style="background: #ef4444"></button>
+              <button type="button" class="color-preset" data-color="#f59e0b" style="background: #f59e0b"></button>
+              <button type="button" class="color-preset" data-color="#10b981" style="background: #10b981"></button>
+              <button type="button" class="color-preset" data-color="#06b6d4" style="background: #06b6d4"></button>
+              <button type="button" class="color-preset" data-color="#3b82f6" style="background: #3b82f6"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-danger" id="deleteBtn" style="display: none;">Excluir</button>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast" class="toast"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
+
